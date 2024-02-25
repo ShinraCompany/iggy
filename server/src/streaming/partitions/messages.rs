@@ -292,13 +292,15 @@ impl Partition {
                 // Last segment is bigger than the remaining size, so we need to get the newest messages from it.
                 let partial_messages = segment
                     .get_newest_message_batches_by_size(remaining_size)
-                    .await?;
+                    .await?
+                    .into_iter()
+                    .map(Arc::new);
                 batches.splice(..0, partial_messages);
                 break;
             }
 
             // Current segment is smaller than the remaining size, so we need to get all messages from it.
-            let segment_batches = segment.get_all_batches().await?;
+            let segment_batches = segment.get_all_batches().await?.into_iter().map(Arc::new);
             batches.splice(..0, segment_batches);
             remaining_size = remaining_size.saturating_sub(segment_size_bytes);
             if remaining_size == 0 {

@@ -98,12 +98,12 @@ pub trait SegmentStorage: Storage<Segment> {
         &self,
         segment: &Segment,
         index_range: &IndexRange,
-    ) -> Result<Vec<Arc<RetainedMessageBatch>>, IggyError>;
+    ) -> Result<Vec<RetainedMessageBatch>, IggyError>;
     async fn load_newest_message_batches_by_size(
         &self,
         segment: &Segment,
         size_bytes: u64,
-    ) -> Result<Vec<Arc<RetainedMessageBatch>>, IggyError>;
+    ) -> Result<Vec<RetainedMessageBatch>, IggyError>;
     async fn save_messages(
         &self,
         segment: &Segment,
@@ -436,7 +436,7 @@ pub(crate) mod tests {
             &self,
             _segment: &Segment,
             _index_range: &IndexRange,
-        ) -> Result<Vec<Arc<RetainedMessageBatch>>, IggyError> {
+        ) -> Result<Vec<RetainedMessageBatch>, IggyError> {
             Ok(vec![])
         }
 
@@ -444,7 +444,7 @@ pub(crate) mod tests {
             &self,
             _segment: &Segment,
             _size: u64,
-        ) -> Result<Vec<Arc<RetainedMessageBatch>>, IggyError> {
+        ) -> Result<Vec<RetainedMessageBatch>, IggyError> {
             Ok(vec![])
         }
 
